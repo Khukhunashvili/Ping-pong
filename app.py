@@ -5,14 +5,17 @@ import random
 w = 700
 h = 400
 
+player_one_score = 0
+player_two_score = 0
+
 root = Tk()
 root.resizable(False, False)
-root.geometry("{}x{}".format(w, h))
+root.geometry("{}x{}".format(w, 475))
 root.title("Ping-Pong")
 
 
 # Add canvas to screen
-c = Canvas(root, width=w, height=h, bg="#1050b7")
+c = Canvas(root, width=w, height=475, bg="#1050b7")
 c.pack()
 
 
@@ -20,10 +23,25 @@ c.pack()
 c.create_rectangle(0, 0, 15, h, fill="#fff", outline="#fff")
 c.create_rectangle(w-15, 0, w, h, fill="#fff", outline="#fff")
 c.create_rectangle(w//2-5, 0, w//2+5, h, fill="#fff", outline="#fff")
+c.create_rectangle(0, 0, w, 10, fill="#fff", outline="#fff")
+c.create_rectangle(0, h, w, h+10, fill="#fff", outline="#fff")
+
+#  - Add score board -
+# Player hints
+player_one_hint = Label(c, text="Player 1", font=("Arial", 20), fg="white", bg="#1050b7")
+player_one_hint.place(relx=0.1, rely=0.9)
+
+player_two_hint = Label(c, text="Player 2", font=("Arial", 20), fg="white", bg="#1050b7")
+player_two_hint.place(relx=0.735, rely=0.9)
+
+# Actual Score
+score = Label(c, text="{} - {}".format(player_one_score, player_two_score), font=("Arial", 20), fg="white", bg="#1050b7")
+score.place(relx=0.46, rely=0.9)
+
 
 ball = c.create_oval(w//2-20, h//2-20, w//2+20, h//2+20, fill="#EA9111", outline="#EA9111")
 ball_R = (c.coords(ball)[2]-c.coords(ball)[0]) / 2
-print(ball_R)
+
 d = ball_R - (Pad.pad_width*(2*ball_R-Pad.pad_width))**0.5
 
 # Define pads
@@ -32,7 +50,7 @@ right_pad = Pad(w-Pad.pad_width, 0, c)
 
 
 # V for balls
-vx, vy = random.choice([-3, 3]), random.choice([4, -4])
+vx, vy = random.choice([-5, 5]), random.choice([6, -6])
 
 
 
@@ -89,10 +107,10 @@ def move_ball():
 
 	# ball touched on left wall (1st player lost)
 	if ball_coords[0] <= 0:
-		pass
+		print("Player 1 Lost")
 	# ball touched on right wall (2nd player lost)
 	if ball_coords[2] >= w:
-		pass
+		print("Player 2 Lost")
 
 
 	c.move(ball, vx, vy)

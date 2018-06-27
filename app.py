@@ -84,6 +84,7 @@ def keyrelease(event):
 
 def move_ball():
 	global vx, vy
+	global player_one_score, player_two_score
 
 	ball_coords = c.coords(ball)
 
@@ -107,11 +108,13 @@ def move_ball():
 
 	# ball touched on left wall (1st player lost)
 	if ball_coords[0] <= 0:
-		print("Player 1 Lost")
+		player_two_score += 1
+		goal()
+
 	# ball touched on right wall (2nd player lost)
 	if ball_coords[2] >= w:
-		print("Player 2 Lost")
-
+		player_one_score += 1
+		goal()
 
 	c.move(ball, vx, vy)
 
@@ -121,6 +124,10 @@ def main():
 	right_pad.move()
 	move_ball()
 	root.after(30, main)
+
+def goal():
+	score.config(text="{} - {}".format(player_one_score, player_two_score))
+	c.coords(ball, w//2-20, h//2-20, w//2+20, h//2+20)
 
 c.bind("<KeyPress>",keypress)
 c.bind("<KeyRelease>",keyrelease)
